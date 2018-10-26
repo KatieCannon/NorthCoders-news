@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const { DB_URL } = require("./config");
+const { DB_URL } =
+  process.env.NODE_ENV === "production" ? process.env : require("./config");
+
 const apiRouter = require("./routes/api-router");
 const { handle400s, handle404s, handle500s } = require("./errors/index");
 
@@ -14,13 +16,11 @@ mongoose
   .then(() => console.log(`Connected to ${DB_URL}`))
   .catch(console.log);
 
-const { DB_URL } =
-  process.env.NODE_ENV === "production" ? process.env : require("./config");
 
 app.use(bodyParser.json());
 
 app.get('/',( req, res, next) => {
-    res.sendFile(`$(__dirname)/views/api.html`)
+    res.sendFile(`${__dirname}/views/api.html`)
 });
 
 app.use("/api", apiRouter);
