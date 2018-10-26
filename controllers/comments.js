@@ -21,7 +21,7 @@ exports.deleteCommentById =(req, res, next) => {
     const commentId = req.params.comment_id;
     Comments.deleteOne({_id : commentId})
     .then(comment => {
-        res.status(201).send({msg: 'comment deleted successfully'})
+        res.status(200).send({msg: 'comment deleted successfully'})
     }
     )
     .catch(next)
