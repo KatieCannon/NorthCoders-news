@@ -20,7 +20,7 @@ const { DB_URL } =
 app.use(bodyParser.json());
 
 app.get('/',( req, res, next) => {
-    res.sendFile(`$(_dirname)/views/api.html`)
+    res.sendFile(`$(__dirname)/views/api.html`)
 });
 
 app.use("/api", apiRouter);
