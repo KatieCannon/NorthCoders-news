@@ -10,23 +10,26 @@ exports.fetchAllTopics = (req, res, next) => {
 
 
 exports.fetchArticlesByTopic =(req, res, next) => {
-    console.log(req.params.topic_slug)
     const slug = req.params.topic_slug;
     Article.find({belongs_to : slug})
-    .then(articles => {
-        console.log(articles)
+   .then(articles => {
+        if(!articles.length){
+            return Promise.reject({status:400,msg:"invalid topic"})
+        } else {
         res.status(200).send({articles})
+        }
     })
     .catch(next)
 }
+// add in commentCount and add to tests
 
 exports.addArticleByTopic = (req, res, next) => {
-    console.log('hi')
     const slug =req.params.topic_slug;
-    console.log(slug)
     Article.create({...req.body, belongs_to:slug})
     .then(article => {
         res.status(201).send({article})
     })
     .catch(next)
 }
+
+// add in commentCount and add to tests

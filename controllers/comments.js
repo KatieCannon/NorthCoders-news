@@ -9,9 +9,10 @@ Comments.findByIdAndUpdate(
     {$inc: { votes: vote === 'up'? +1 : vote === 'down'? -1 : 0}}
 )
 .then(updatedComment => {
-    Comments.find({_id:commentId})
-    .then(article => {
-        res.status(201).send({article})
+    if(!updatedComment)next({status:400, msg:"invalid comment id"})
+    else Comments.find({_id:commentId})
+    .then(comment=> {
+        res.status(200).send({comment})
     } )
 })
 .catch(next)
