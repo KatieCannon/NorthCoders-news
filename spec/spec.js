@@ -70,9 +70,11 @@ describe("/api", () => {
             "created_at",
             "belongs_to",
             "created_by",
+            "commentCount",
             "__v"
           );
-          // check length is the correct length
+          expect(res.body.articles[0].created_by).to.be.an("object");
+          expect(res.body.articles).to.have.lengthOf(2);
         });
     });
     it("responds with a 404 when the page is not found", () => {
@@ -106,6 +108,8 @@ describe("/api", () => {
           expect(res.body.article.belongs_to).to.equal(
             articlesDocs[0].belongs_to
           );
+          expect(res.body.article.title).to.equal("new article");
+          expect(res.body.article.created_by).to.equal(`${usersDocs[0]._id}`);
           expect(res.body.article).to.have.all.keys(
             "_id",
             "title",
@@ -161,6 +165,7 @@ describe("/api", () => {
             "commentCount",
             "__v"
           );
+          expect(res.body.articles[0].created_by).to.be.an("object");
           expect(typeof res.body.articles[0].created_by).to.equal("object");
         });
     });
@@ -191,6 +196,7 @@ describe("/api", () => {
             "commentCount",
             "__v"
           );
+          expect(res.body.article.created_by).to.be.an("object");
         });
     });
     it("responds with a 400 when the page is not found", () => {
@@ -207,9 +213,6 @@ describe("/api", () => {
         .get(`/api/articles/${articlesDocs[0]._id}/comments`)
         .expect(200)
         .then(res => {
-          console.log(articlesDocs[0]._id);
-          console.log(res.body.comments[0].belongs_to._id);
-
           expect(typeof res.body).to.equal("object");
           expect(res.body.comments[0].belongs_to._id).to.contain(
             articlesDocs[0]._id
@@ -223,6 +226,7 @@ describe("/api", () => {
             "created_at",
             "__v"
           );
+          expect(res.body.comments[0].belongs_to).to.be.an("object");
         });
     });
     it("responds with a 404 when the page is not found", () => {
@@ -282,113 +286,116 @@ describe("/api", () => {
         .then(res => {
           expect(res.body.msg).to.equal("invalid input types");
         });
-   });
-   
-   
-   
-   it("PATCH/ returns status 201 and the article for the given id with vote ammended", () => {
-    return request
-      .patch(`/api/articles/${articlesDocs[0]._id}?vote=up`)
-      .expect(200)
-      .then(res => {
-        expect(typeof res.body).to.equal("object");
-        expect(res.body.article[0].votes).to.equal(1);
-        expect(res.body.article[0].title).to.equal(articlesDocs[0].title);
-        expect(res.body.article[0]).to.have.all.keys(
-          "_id",
-          "title",
-          "body",
-          "votes",
-          "created_at",
-          "belongs_to",
-          "created_by",
-          "commentCount",
-          "__v"
-        );
-      });
+    });
+
+    it("PATCH/ returns status 201 and the article for the given id with vote ammended", () => {
+      return request
+        .patch(`/api/articles/${articlesDocs[0]._id}?vote=up`)
+        .expect(200)
+        .then(res => {
+          expect(typeof res.body).to.equal("object");
+          expect(res.body.article[0].votes).to.equal(1);
+          expect(res.body.article[0].title).to.equal(articlesDocs[0].title);
+          expect(res.body.article[0]).to.have.all.keys(
+            "_id",
+            "title",
+            "body",
+            "votes",
+            "created_at",
+            "belongs_to",
+            "created_by",
+            "commentCount",
+            "__v"
+          );
+          expect(res.body.article[0].created_by).to.be.an("object");
+        });
+    });
+
+    it("PATCH/ returns status 201 and the article for the given id with vote ammended", () => {
+      return request
+        .patch(`/api/articles/${articlesDocs[0]._id}?vote=down`)
+        .expect(200)
+        .then(res => {
+          expect(typeof res.body).to.equal("object");
+          expect(res.body.article[0].votes).to.equal(-1);
+          expect(res.body.article[0].title).to.equal(articlesDocs[0].title);
+          expect(res.body.article[0]).to.have.all.keys(
+            "_id",
+            "title",
+            "body",
+            "votes",
+            "created_at",
+            "belongs_to",
+            "created_by",
+            "commentCount",
+            "__v"
+          );
+          expect(res.body.article[0].created_by).to.be.an("object");
+        });
+    });
+    it("responds with a 200 when given anything that isnt up/down and returns original data", () => {
+      return request
+        .patch(`/api/articles/${articlesDocs[0]._id}?vote=not`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.article[0].votes).to.equal(0);
+        });
+    });
   });
 
-  it("PATCH/ returns status 201 and the article for the given id with vote ammended", () => {
-    return request
-      .patch(`/api/articles/${articlesDocs[0]._id}?vote=down`)
-      .expect(200)
-      .then(res => {
-        expect(typeof res.body).to.equal("object");
-        expect(res.body.article[0].votes).to.equal(-1);
-        expect(res.body.article[0].title).to.equal(articlesDocs[0].title);
-        expect(res.body.article[0]).to.have.all.keys(
-          "_id",
-          "title",
-          "body",
-          "votes",
-          "created_at",
-          "belongs_to",
-          "created_by",
-          "commentCount",
-          "__v"
-        );
-      });
-  });
-  it("responds with a 200 when given anything that isnt up/down and returns original data", () => {
-    return request
-      .patch(`/api/articles/${articlesDocs[0]._id}?vote=not`)
-      .expect(200)
-      .then(res => {
-        console.log(res.body)
-        expect(res.body.article[0].votes).to.equal(0);
-      });
- });
- 
-    
-  });
-
-  describe("/comments", ()=> {
+  describe("/comments", () => {
     it("PATCH / returns a status 200 and the comment with vote ammended", () => {
       return request
-      .patch(`/api/comments/${commentsDocs[0]._id}?vote=up`)
-      .expect(200)
-      .then(res => {
-        expect(res.body.comment[0].votes).to.equal(commentsDocs[0].votes+1)
-      })
-    })
-it("returns a status 400 when comment id is invalid", () => {
-  return request
-  .patch("/api/comments/fjhkugthhiij?vote=up")
-  .expect(400)
-  .then(res => {
-    expect(res.body.msg).to.equal("invalid comment id")
-  })
-})
-it('DELETE/ returns message that comment has been removed', ()=>{
-  return request
-  .delete(`/api/comments/${commentsDocs[0]._id}`)
-  .expect(200)
-  .then(res => {
-    expect(res.body.msg).to.equal("comment deleted successfully")
-    return request
+        .patch(`/api/comments/${commentsDocs[0]._id}?vote=up`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.comment[0].votes).to.equal(commentsDocs[0].votes + 1);
+        });
+    });
+    it("returns a status 400 when comment id is invalid", () => {
+      return request
+        .patch("/api/comments/fjhkugthhiij?vote=up")
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("invalid comment id");
+        });
+    });
+    it("DELETE/ returns message that comment has been removed", () => {
+      return request
+        .delete(`/api/comments/${commentsDocs[0]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.msg).to.equal("comment deleted successfully");
+          return request;
+        });
+    });
+  });
 
-})
-  })
+  describe("/users", () => {
+    it("returns user by username", () => {
+      return request
+        .get(`/api/users/${usersDocs[0].username}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.user[0]).to.have.all.keys(
+            "username",
+            "name",
+            "avatar_url",
+            "__v",
+            "_id"
+          );
+          expect(res.body.user[0].username).to.equal(
+            `${usersDocs[0].username}`
+          );
+        });
+    });
+    it("returns a 400 when user id is invalid", () => {
+      return request
+        .get(`/api/users/gtyhujikolpl`)
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("invalid user id");
+        });
+    });
+  });
 });
-
-describe.only('/users',()=>{
-  it('returns user by username',()=>{
-    return request
-    .get(`/api/users/${usersDocs[0].username}`)
-    .expect(200)
-    .then(res=>{
-      expect(res.body.user[0]).to.have.all.keys("username","name","avatar_url","__v","_id");
-      expect(res.body.user[0].username).to.equal(`${usersDocs[0].username}`)
-    })
-  })
-  it("returns a 400 when user id is invalid", () => {
-    return request
-    .get(`/api/users/gtyhujikolpl`)
-    .expect(400)
-    .then(res=> {
-      expect(res.body.msg).to.equal("invalid user id")
-    })
-
-  })
-})
-})

@@ -12,7 +12,6 @@ exports.getAllArticles = (req, res, next) => {
     .then(articles => {
       res.status(200).send({ articles });
     })
-
     .catch(next);
 };
 
@@ -37,20 +36,17 @@ exports.getArticleById = (req, res, next) => {
 exports.getArticleComments = (req, res, next) => {
   const articleId = req.params.article_id;
   Comments.find({ belongs_to: articleId })
-    .populate("belongs_to", "created_by")
+    .populate("belongs_to")
     .lean()
     .then(comments => {
-      console.log('hi')
       res.status(200).send({ comments });
-     
     })
     .catch(err => {
       if (err.name === "CastError")
-    next({ status: 400, msg: "article id is invalid" })
-  else next(err)
-    
-});
-}
+        next({ status: 400, msg: "article id is invalid" });
+      else next(err);
+    });
+};
 
 exports.addCommentToArticle = (req, res, next) => {
   const articleId = req.params.article_id;
@@ -64,8 +60,6 @@ exports.addCommentToArticle = (req, res, next) => {
 exports.voteOnArticle = (req, res, next) => {
   const vote = req.query.vote;
   const articleId = req.params.article_id;
- // console.log(articleId);
- // console.log(vote);
   Article.findByIdAndUpdate(
     { _id: articleId },
     { $inc: { votes: vote === "up" ? +1 : vote === "down" ? -1 : 0 } },
@@ -74,10 +68,9 @@ exports.voteOnArticle = (req, res, next) => {
     .populate("created_by")
     .lean()
     .then(article => {
-     // console.log(article);
       return Promise.all([commentCount(article)]).then(article => {
         res.status(200).send({ article });
       });
     })
-    .catch(next)
+    .catch(next);
 };

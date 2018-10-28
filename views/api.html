@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Nc-news-hack homepage</title>
+</head>
+<body>
+    <h1>Topics</h1>
+    <h2>GET /api/topics</h2>
+    <h3>Serves an HTML page with documentation for all the available endpoints</h3>
+    <h2>GET /api/topics/:topic_slug/articles</h2>
+    <h3>Return all the articles for a certain topic</h3>
+    <h3>e.g: `/api/topics/football/articles`</h3>
+    <h2>POST /api/topics/:topic_slug/articles</h2>
+    <h3>Add a new article to a topic. This route requires a JSON body with title and body key value pairs</h3>
+    <h3>e.g`{ "title": "new article", "body": "This is my new article content", "created_by": "user_id goes here"}`</h3>
+    <h1>Articles</h1>
+    <h2>GET /api/articles</h2>
+    <h3>Returns all the articles</h3>
+    <h2>GET /api/articles/:article_id</h2>
+    <h3>Get an individual article</h3>
+    <h2>GET /api/articles/:article_id/comments</h2>
+    <h3>Get all the comments for a individual article</h3>
+    <h2>POST /api/articles/:article_id/comments</h2>
+    <h3>Add a new comment to an article. This route requires a JSON body with body and created_by key value pairs</h3>
+    <h3>e.g: `{"body": "This is my new comment", "created_by": "user_id goes here"}`</h3>
+    <h2>PATCH /api/articles/:article_id</h2>
+    <h3>Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down'</h3>
+    <h3>e.g: `/api/articles/:article_id?vote=up`</h3>
+    <h1>Comments</h1>
+    <h2>PATCH /api/comments/:comment_id</h2>
+    <h3>Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down'</h3>
+    <h3>e.g: `/api/comments/:comment_id?vote=down`</h3>
+    <h2>DELETE /api/comments/:comment_id</h2>
+    <h3>Deletes a comment</h3>
+    <h1>Users</h1>
+    <h2>GET /api/users/:username</h2>
+    <h3>e.g: `/api/users/mitch123`</h3>
+    <h3>Returns a JSON object with the profile data for the specified user</h3>
+
+</body>
+</html>
