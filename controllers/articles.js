@@ -1,5 +1,5 @@
-const { Topic, Article, Comments, User } = require("../models/index");
-const { commentCount } = require("./utils");
+const {  Article, Comments } = require("../models/index");
+const { commentCount } = require("../Utils/utils");
 
 exports.getAllArticles = (req, res, next) => {
   Article.find()
@@ -26,26 +26,18 @@ exports.getArticleById = (req, res, next) => {
     .then(([article]) => {
       res.status(200).send({ article });
     })
-    .catch(err => {
-      if (err.name === "CastError")
-        next({ status: 400, msg: "article id is not valid" });
-      else next(err);
-    });
+    .catch(next)
 };
 
 exports.getArticleComments = (req, res, next) => {
   const articleId = req.params.article_id;
   Comments.find({ belongs_to: articleId })
-    .populate("belongs_to")
+    .populate("created_by")
     .lean()
     .then(comments => {
       res.status(200).send({ comments });
     })
-    .catch(err => {
-      if (err.name === "CastError")
-        next({ status: 400, msg: "article id is invalid" });
-      else next(err);
-    });
+    .catch(next)
 };
 
 exports.addCommentToArticle = (req, res, next) => {

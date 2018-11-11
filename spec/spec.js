@@ -214,7 +214,7 @@ describe("/api", () => {
         .expect(200)
         .then(res => {
           expect(typeof res.body).to.equal("object");
-          expect(res.body.comments[0].belongs_to._id).to.contain(
+          expect(res.body.comments[0].belongs_to).to.contain(
             articlesDocs[0]._id
           );
           expect(res.body.comments[0]).to.have.all.keys(
@@ -226,7 +226,7 @@ describe("/api", () => {
             "created_at",
             "__v"
           );
-          expect(res.body.comments[0].belongs_to).to.be.an("object");
+        expect(res.body.comments[0].created_by).to.be.an("object");
         });
     });
     it("responds with a 404 when the page is not found", () => {
@@ -237,12 +237,12 @@ describe("/api", () => {
           expect(res.body.msg).to.equal("page not found");
         });
     });
-    it("responds with a 400 when article id is invalid", () => {
+    it("responds with a 400 when article id is not valid", () => {
       return request
         .get("/api/articles/dfg/comments")
         .expect(400)
         .then(res => {
-          expect(res.body.msg).to.equal("article id is invalid");
+          expect(res.body.msg).to.equal("article id is not valid");
         });
     });
 

@@ -1,4 +1,4 @@
-const { Topic, Article, Comments, User } = require("../models/index");
+const {  Comments } = require("../models/index");
 
 exports.voteOnComment = (req, res, next) => {
   const commentId = req.params.comment_id;

@@ -53,6 +53,8 @@ const config = {
         DB_URL : 'mongodb://localhost:27017/nc_news_test'
     }
 }
+
+module.exports = config[ENV]
 ```
 
 5. Run mongod in a new terminal window and keep it running throughout

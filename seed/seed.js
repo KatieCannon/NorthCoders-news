@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Topic, User, Article, Comments} = require('../models/index')
-const {formatArticlesData, formatCommentsData} = require('./utils');
+const {formatArticlesData, formatCommentsData} = require('../Utils/utils2');
 
 const seedDB = ({articlesData, commentsData, topicsData, usersData}) => {
 return mongoose.connection.dropDatabase()

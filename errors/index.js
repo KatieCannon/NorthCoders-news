@@ -1,6 +1,8 @@
 exports.handle400s = (err, req, res, next) => {
   if (err.name === "ValidationError")
     res.status(400).send({ status: 400, msg: "invalid input types" });
+    if(err.name === "CastError")
+    res.status(400).send({status:400, msg:"article id is not valid"})
   if (err.status === 400)
     res.status(400).send({ status: 400, msg: err.msg || "bad request" });
   else next(err);

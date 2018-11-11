@@ -1,4 +1,4 @@
-const { Topic, Article, Comments, User } = require("../models/index");
+const { User } = require("../models/index");
 
 exports.getUserByUsername = (req, res, next) => {
   const userName = req.params.username;

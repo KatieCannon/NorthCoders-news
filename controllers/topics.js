@@ -1,5 +1,5 @@
-const { Topic, Article, Comment, User } = require("../models/index");
-const { commentCount } = require("./utils");
+const { Topic, Article } = require("../models/index");
+const { commentCount } = require("../Utils/utils");
 
 exports.fetchAllTopics = (req, res, next) => {
   Topic.find()
@@ -15,12 +15,12 @@ exports.fetchArticlesByTopic = (req, res, next) => {
     .populate("created_by")
     .lean()
     .then(articles => {
-      const articlesWithCommentCounts = articles.map(article =>
-        commentCount(article)
-      );
       if (!articles.length) {
         return Promise.reject({ status: 400, msg: "invalid topic" });
       } else {
+        const articlesWithCommentCounts = articles.map(article =>
+          commentCount(article)
+        );
         return Promise.all(articlesWithCommentCounts).then(articles => {
           res.status(200).send({ articles });
         });
@@ -38,5 +38,3 @@ exports.addArticleByTopic = (req, res, next) => {
     .catch(next);
 };
 
-// add in commentCount and add to tests
-//populate?
