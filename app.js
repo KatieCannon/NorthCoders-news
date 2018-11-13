@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require('cors')
 const { DB_URL } =
   process.env.NODE_ENV === "production" ? process.env : require("./config");
 
@@ -18,7 +19,7 @@ mongoose
 
 
 app.use(bodyParser.json());
-
+app.use(cors())
 app.get('/',( req, res, next) => {
     res.sendFile(`${__dirname}/views/api.html`)
 });
