@@ -31,10 +31,16 @@ exports.fetchArticlesByTopic = (req, res, next) => {
 
 exports.addArticleByTopic = (req, res, next) => {
   const slug = req.params.topic_slug;
-  Article.create({ ...req.body, belongs_to: slug })
+  return Article.create({ ...req.body, belongs_to: slug })
     .then(article => {
-      res.status(201).send({ article });
-    })
-    .catch(next);
+      return Article.findOne({'_id':article._id}).populate("created_by").lean()
+    }).then(article1 => {
+     const article ={...article1, comment_count:0}
+      res.status(201).send({article})
+  })
+  
+    //   res.status(201).send({ article });
+    // })
+     .catch(next);
 };
 
