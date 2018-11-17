@@ -42,8 +42,13 @@ exports.getArticleComments = (req, res, next) => {
 
 exports.addCommentToArticle = (req, res, next) => {
   const articleId = req.params.article_id;
-  Comments.create({ ...req.body, belongs_to: articleId })
-    .then(comment => {
+  return Comments.create({ ...req.body, belongs_to: articleId })
+  .then(comment=>{
+   return Comments.findOne({'_id':comment._id})
+  .populate('created_by').lean()
+  })
+    .then(comment1 => {
+      comment = {...comment1}
       res.status(201).send({ comment });
     })
     .catch(next);

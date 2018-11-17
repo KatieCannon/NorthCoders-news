@@ -15,8 +15,7 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "foreman": "^3.0.1",
-    "heroku": "^7.18.5",
+    "heroku": "^7.18.9",
     "mongo": "^0.1.0",
     "mongoose": "^5.3.11"
   },
