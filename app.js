@@ -1,4 +1,4 @@
-
+// process.env.NODE_ENV === 'production'
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
