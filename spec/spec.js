@@ -109,7 +109,7 @@ describe("/api", () => {
             articlesDocs[0].belongs_to
           );
           expect(res.body.article.title).to.equal("new article");
-          expect(res.body.article.created_by).to.equal(`${usersDocs[0]._id}`);
+          expect(res.body.article.created_by._id).to.equal(`${usersDocs[0]._id}`);
           expect(res.body.article).to.have.all.keys(
             "_id",
             "title",
@@ -118,6 +118,7 @@ describe("/api", () => {
             "created_at",
             "belongs_to",
             "created_by",
+            "comment_count",
             "__v"
           );
         });
